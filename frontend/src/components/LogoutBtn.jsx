@@ -6,7 +6,7 @@ function LogoutBtn() {
     e.preventDefault();
     logout();
   };
-  return <boutton onClick={handleLogout}>Se déconnecter</boutton>;
+  return <bouton onClick={handleLogout}>Se déconnecter</bouton>;
 }
 
 export default LogoutBtn;

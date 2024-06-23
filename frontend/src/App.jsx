@@ -13,6 +13,11 @@ import Comments from "./pages/Comments";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import { useAuthContext } from "./hooks/useAuthContext";
+import PersonLayout from "./pages/PersonLayout";
+import AdminHome from "./pages/AdminHome";
+import PersonHome from "./pages/PersonHome";
+import RoleProtectedRoute from "./components/ProtectedRoutes";
+import Bls from "./pages/Bls";
 
 const App = () => {
   const { user } = useAuthContext();
@@ -23,17 +28,23 @@ const App = () => {
       <Routes>
         <Route
           path="/"
-          element={
-            user && user.role === "admin" ? (
-              <AppLayout />
-            ) : (
-              <Navigate to="login" />
-            )
-          }
+          element={user ? <AppLayout /> : <Navigate to="login" />}
         >
-          <Route path="users" element={<Users />} />
-          <Route path="documents" element={<Documents />} />
-          <Route path="comments" element={<Comments />} />
+          {/* Admin roles */}
+          <Route path="/" element={user?.role === "admin" && <AdminHome />} />
+          <Route path="users" element={user?.role === "admin" && <Users />} />
+          <Route
+            path="documents"
+            element={user?.role === "admin" && <Documents />}
+          />
+          <Route
+            path="comments"
+            element={user?.role === "admin" && <Comments />}
+          />
+          {/* Person roles */}
+
+          <Route path="/" element={user?.role === "person" && <PersonHome />} />
+          <Route path="/Bls" element={user?.role === "person" && <Bls />} />
         </Route>
 
         <Route

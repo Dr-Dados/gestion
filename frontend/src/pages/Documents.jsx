@@ -42,7 +42,6 @@ function Documents() {
           },
         });
         const data = await res.json();
-        console.log("data", data);
         if (res.ok) {
           dispatch({ type: "SET_DOCUMENTS", payload: data });
         }
@@ -53,7 +52,6 @@ function Documents() {
     if (user) {
       fetchDocuments();
     }
-    console.log(documents);
   }, [dispatch, user]);
   const [data, setData] = useState([]);
   const [isOpenModal, setIsOpenModal] = useState(false);
@@ -70,6 +68,7 @@ function Documents() {
       }
     }
   }, [filter, documents]);
+
   return (
     <div>
       <DocumentHeader>

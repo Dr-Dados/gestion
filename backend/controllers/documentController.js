@@ -1,5 +1,5 @@
 const BL = require("../models/documentModel");
-
+const sendMail = require("../helpers/sendMail");
 //get all documents
 const getDocuments = async (req, res) => {
   try {
@@ -35,6 +35,12 @@ const getDocumentsByUser = async (req, res) => {
 const createDocument = async (req, res) => {
   try {
     const document = BL.create(req.body);
+    // send mail on success
+    sendMail(
+      "gurofu@gmail.com",
+      "Document Created",
+      "Your document has been created successfully"
+    );
     res.status(201).json(document);
   } catch (err) {
     res.status(400).json({ message: err.message });
@@ -77,5 +83,5 @@ module.exports = {
   getDocumentsByUser,
   createDocument,
   getDocumentById,
-  deleteDocument
+  deleteDocument,
 };
