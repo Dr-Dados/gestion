@@ -23,7 +23,11 @@ router.get("/:id", getDocumentById);
 router.get("/user/:id", getDocumentsByUser);
 
 //create a document
-router.post("/", upload.single("path"), createDocument);
+router.post("/", createDocument);
+// router.post("/", (req, res) => {
+//   console.log(req.body);
+//   res.send(req.body);
+// });
 
 //update a document
 router.put("/:id", (req, res) => {

@@ -13,11 +13,10 @@ import Comments from "./pages/Comments";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import { useAuthContext } from "./hooks/useAuthContext";
-import PersonLayout from "./pages/PersonLayout";
 import AdminHome from "./pages/AdminHome";
 import PersonHome from "./pages/PersonHome";
-import RoleProtectedRoute from "./components/ProtectedRoutes";
-import Bls from "./pages/Bls";
+
+import PersonBL from "./pages/PersonBL";
 
 const App = () => {
   const { user } = useAuthContext();
@@ -44,7 +43,10 @@ const App = () => {
           {/* Person roles */}
 
           <Route path="/" element={user?.role === "person" && <PersonHome />} />
-          <Route path="/Bls" element={user?.role === "person" && <Bls />} />
+          <Route
+            path="/Bls"
+            element={user?.role === "person" && <PersonBL />}
+          />
         </Route>
 
         <Route

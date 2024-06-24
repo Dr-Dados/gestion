@@ -3,7 +3,6 @@ import styled from "styled-components";
 import { HiPencil, HiTrash } from "react-icons/hi2";
 import { useEffect, useState } from "react";
 import { useAuthContext } from "../../hooks/useAuthContext";
-import { useDocumentsContext } from "../../hooks/useDocumentContext";
 
 const TableColumn = styled.td`
   padding: 1.6rem 2.4rem;
@@ -37,7 +36,6 @@ const Button = styled.button`
 `;
 function DocumentRow({ document }) {
   const { user } = useAuthContext();
-  const { dispatch, documents } = useDocumentsContext();
 
   const { _id, status, person, createdAt: date } = document;
   const blDate = new Date(date);
@@ -46,49 +44,21 @@ function DocumentRow({ document }) {
     month: "long",
     day: "numeric",
   });
-  console.log(document);
+  console.log(formattedDate);
   const { name, fonction, gamme, city } = person[0];
   console.log(person);
 
-  const deleteHandler = async () => {
-    try {
-      const response = await fetch(
-        `http://localhost:3000/api/documents/${_id}`,
-        {
-          headers: {
-            Authorization: `Bearer ${user.token}`,
-            "content-type": "application/json",
-          },
-          method: "DELETE",
-        }
-      );
-      if (response.ok) {
-        console.log("Document deleted");
-        dispatch({ type: "DELETE_DOCUMENT", payload: _id });
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  };
   return (
     <>
       <tr>
         <TableColumn>{_id}</TableColumn>
-        <TableColumn>{name}</TableColumn>
-        <TableColumn>{fonction}</TableColumn>
-        <TableColumn>{gamme}</TableColumn>
-        <TableColumn>{city}</TableColumn>
         <TableColumn>{formattedDate}</TableColumn>
-        <TableColumn>
-          {status === "Signed" ? "signé" : "en attente"}
-        </TableColumn>
+        <TableColumn>{status}</TableColumn>
 
         <ActionButtons>
           <Button>
             <HiPencil />
-          </Button>
-          <Button onClick={deleteHandler}>
-            <HiTrash />
+            <p>Accuser réception</p>
           </Button>
         </ActionButtons>
       </tr>

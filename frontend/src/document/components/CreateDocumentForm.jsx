@@ -25,17 +25,27 @@ function CreateDocumentForm() {
         setUsers(data);
       });
   }, []);
-  console.log(file);
   const createHandler = async (e) => {
     e.preventDefault();
     const selectedUser = users.find((user) => user.name === selectedUsername);
-    const newDoc = {
+    const newFile = {
       path: file.name,
+      type: file.type,
+      size: file.size,
+      lastModifiedDate: file.lastModifiedDate,
+      lastModified: file.lastModified,
+      webkitRelativePath: file.webkitRelativePath,
+    };
+    const newDoc = {
+      newFile,
+      user_id: selectedUser._id,
       person: [
         {
           name: selectedUser.name,
           gamme: selectedUser.gamme,
           city: selectedUser.city,
+          fonction: selectedUser.fonction,
+          email: selectedUser.email,
         },
       ],
     };
