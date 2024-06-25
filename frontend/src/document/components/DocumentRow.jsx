@@ -5,6 +5,7 @@ import { useAuthContext } from "../../hooks/useAuthContext";
 import { useDocumentsContext } from "../../hooks/useDocumentContext";
 import { toast } from "react-hot-toast";
 import { useState } from "react";
+import FileDownloadButton from "../../components/FileButtonDownload";
 const TableColumn = styled.td`
   padding: 1.6rem 2.4rem;
 `;
@@ -96,7 +97,7 @@ function DocumentRow({ document }) {
 
         <ActionButtons>
           <Button>
-            <HiPencil />
+            <FileDownloadButton filename={document.name} />
           </Button>
           <Button onClick={deleteHandler}>
             <HiTrash />

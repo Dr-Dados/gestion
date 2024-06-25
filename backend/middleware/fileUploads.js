@@ -7,7 +7,7 @@ const fileUpload = multer({
       cb(null, "uploads");
     },
     filename: (req, file, cb) => {
-      cb(null, new Date().toISOString() + "-" + file.originalname);
+      cb(null, file.originalname);
     },
   }),
   fileFilter: (req, file, cb) => {

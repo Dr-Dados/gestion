@@ -3,9 +3,16 @@ import styled from "styled-components";
 import { HiPencil, HiTrash } from "react-icons/hi2";
 import { useEffect, useState } from "react";
 import { useAuthContext } from "../../hooks/useAuthContext";
+import FileDownloadButton from "../../components/FileButtonDownload";
 
 const TableColumn = styled.td`
   padding: 1.6rem 2.4rem;
+`;
+
+const ButtonGroup = styled.td`
+  display: flex;
+  justify-content: flex-end;
+  gap: 1.6rem;
 `;
 
 const CustomButton = styled.button`
@@ -54,7 +61,7 @@ function DocumentRow({ document, setSelectedId, setIsOpenModal }) {
           </div>
         </TableColumn>
 
-        <div>
+        <ButtonGroup>
           <CustomButton onClick={handleClick}>
             <p>
               {document.status === "en attente"
@@ -62,7 +69,8 @@ function DocumentRow({ document, setSelectedId, setIsOpenModal }) {
                 : "Ajouter un commentaire"}
             </p>
           </CustomButton>
-        </div>
+          <FileDownloadButton filename={document.name} />
+        </ButtonGroup>
       </tr>
     </>
   );
