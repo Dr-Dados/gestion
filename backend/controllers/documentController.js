@@ -36,17 +36,13 @@ const getDocumentsByUser = async (req, res) => {
 //create a document
 const createDocument = async (req, res) => {
   try {
-    console.log("req.body", req.body);
-    const file = req.body.newFile;
-    // if (!file) {
-    //   return res.status(400).json({ message: "Please upload a file" });
-    // }
-    const { name, gamme, city, email, fonction } = req.body?.person[0];
-    console.log(name, gamme, city, email);
+    const file = req.file;
+    const newDocData = JSON.parse(req.body.newDoc);
+    const { _id, name, gamme, city, email, fonction } = newDocData.person[0];
     const newDoc = {
       path: file.path,
-      
-      user_id: req.body.user_id,
+
+      user_id: newDocData.user_id,
       person: [
         {
           name,
@@ -57,15 +53,16 @@ const createDocument = async (req, res) => {
         },
       ],
     };
+    console.log("newDoc", newDoc);
 
-    const document = await BL.create(newDoc);
-    // // send mail on success
-    sendMail(
-      email,
-      "Document Created",
-      "Your document has been created successfully"
-    );
-    res.status(200).json(document);
+    // const document = await BL.create(newDoc);
+    // // // send mail on success
+    // sendMail(
+    //   email,
+    //   "Document Created",
+    //   "Your document has been created successfully"
+    // );
+    // res.status(200).json(document);
   } catch (err) {
     res.status(400).json({ message: err.message });
   }

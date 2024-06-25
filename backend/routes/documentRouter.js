@@ -9,7 +9,7 @@ const {
 } = require("../controllers/documentController");
 const requireAuth = require("../middleware/requireAuth");
 
-const { upload } = require("../helpers/fileStoring");
+const fileUpload = require("../middleware/fileUploads");
 
 const router = express.Router();
 // Require Auth for all documents routes
@@ -24,7 +24,7 @@ router.get("/:id", getDocumentById);
 router.get("/user/:id", getDocumentsByUser);
 
 //create a document
-router.post("/", createDocument);
+router.post("/", fileUpload.single("file"), createDocument);
 // router.post("/", (req, res) => {
 //   console.log(req.body);
 //   res.send(req.body);
