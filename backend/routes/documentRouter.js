@@ -5,6 +5,7 @@ const {
   getDocumentsByUser,
   createDocument,
   deleteDocument,
+  updateDocument,
 } = require("../controllers/documentController");
 const requireAuth = require("../middleware/requireAuth");
 
@@ -30,9 +31,7 @@ router.post("/", createDocument);
 // });
 
 //update a document
-router.put("/:id", (req, res) => {
-  res.json({ message: "Document updated" });
-});
+router.patch("/:id", updateDocument);
 
 //delete a document
 router.delete("/:id", deleteDocument);

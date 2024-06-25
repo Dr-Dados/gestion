@@ -18,6 +18,14 @@ export const documentReducer = (state, action) => {
         ...state,
         documents: [...state.documents, action.payload],
       };
+
+    case "UPDATE_DOCUMENT":
+      return {
+        ...state,
+        documents: state.documents.map((document) =>
+          document._id === action.payload._id ? action.payload : document
+        ),
+      };
     case "DELETE_DOCUMENT":
       return {
         ...state,

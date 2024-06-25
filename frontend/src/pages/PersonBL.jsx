@@ -9,9 +9,9 @@ function PersonBL() {
   const { user } = useAuthContext();
   const { documents, dispatch } = useDocumentsContext();
   const [isOpenModal, setIsOpenModal] = useState(false);
-  const [selectedId, setSelectedId] = useState(null);
+  const [selectedDocument, setSelectedDocument] = useState(null);
 
-  console.log(selectedId, isOpenModal);
+  console.log(selectedDocument, isOpenModal);
 
   useEffect(() => {
     const fetchDocuments = async () => {
@@ -44,7 +44,7 @@ function PersonBL() {
       <h2>Bons de livraison</h2>
       <UserDocumentTable
         documents={documents}
-        setSelectedId={setSelectedId}
+        setSelectedId={setSelectedDocument}
         setIsOpenModal={setIsOpenModal}
       />
       {isOpenModal && (
@@ -52,7 +52,7 @@ function PersonBL() {
           <h1>
             <AccuseForm
               onClose={() => setIsOpenModal(false)}
-              _id={selectedId}
+              document={selectedDocument}
             />
           </h1>
         </Modal>

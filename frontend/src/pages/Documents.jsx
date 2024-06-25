@@ -82,7 +82,11 @@ function Documents() {
           }}
         />
       </DocumentHeader>
-      <DocumentTable documents={filteredDocuments} />
+      {documents.length > 0 ? (
+        <DocumentTable documents={filteredDocuments} />
+      ) : (
+        <h3>Aucun document à afficher</h3>
+      )}
 
       {isOpenModal && (
         <Modal onClose={() => setIsOpenModal(false)}>

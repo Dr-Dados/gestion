@@ -22,7 +22,7 @@ const CustomButton = styled.button`
   }
 `;
 function DocumentRow({ document, setSelectedId, setIsOpenModal }) {
-  const { _id, status, person, createdAt: date } = document;
+  const { _id, status, createdAt: date } = document;
   const blDate = new Date(date);
   const formattedDate = blDate.toLocaleDateString("fr-FR", {
     year: "numeric",
@@ -31,7 +31,7 @@ function DocumentRow({ document, setSelectedId, setIsOpenModal }) {
   });
 
   const handleClick = () => {
-    setSelectedId(_id);
+    setSelectedId(document);
     setIsOpenModal(true);
   };
 
@@ -56,7 +56,11 @@ function DocumentRow({ document, setSelectedId, setIsOpenModal }) {
 
         <div>
           <CustomButton onClick={handleClick}>
-            <p>Accuser réception</p>
+            <p>
+              {document.status === "en attente"
+                ? "Accuser réception"
+                : "Ajouter un commentaire"}
+            </p>
           </CustomButton>
         </div>
       </tr>
