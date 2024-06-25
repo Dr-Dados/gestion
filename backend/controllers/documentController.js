@@ -39,9 +39,10 @@ const createDocument = async (req, res) => {
     const file = req.file;
     const newDocData = JSON.parse(req.body.newDoc);
     const { _id, name, gamme, city, email, fonction } = newDocData.person[0];
+    const blName = `BL_${new Date}`
     const newDoc = {
       path: file.path,
-
+      name: file.originalname,
       user_id: newDocData.user_id,
       person: [
         {
@@ -52,17 +53,18 @@ const createDocument = async (req, res) => {
           email,
         },
       ],
+      comments: [],
     };
     console.log("newDoc", newDoc);
 
-    // const document = await BL.create(newDoc);
-    // // // send mail on success
-    // sendMail(
-    //   email,
-    //   "Document Created",
-    //   "Your document has been created successfully"
-    // );
-    // res.status(200).json(document);
+    const document = await BL.create(newDoc);
+    // // send mail on success
+    sendMail(
+      email,
+      "Document Created",
+      "Your document has been created successfully"
+    );
+    res.status(200).json(document);
   } catch (err) {
     res.status(400).json({ message: err.message });
   }

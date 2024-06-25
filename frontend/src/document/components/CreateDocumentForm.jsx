@@ -52,13 +52,17 @@ function CreateDocumentForm({ onClose }) {
         },
       ],
     };
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("newDoc", JSON.stringify(newDoc));
+    console.log(formData);
+
     const reponse = await fetch("http://localhost:3000/api/documents", {
       headers: {
         Authorization: `Bearer ${user.token}`,
-        "content-type": "application/json",
       },
       method: "POST",
-      body: JSON.stringify(newDoc),
+      body: formData,
     });
     const json = await reponse.json();
 
@@ -91,6 +95,7 @@ function CreateDocumentForm({ onClose }) {
       <FormRow label="Fichier">
         <FileInput
           id="file"
+          name="fileUpload"
           accept="image/*"
           type="file"
           onChange={(e) => setFile(e.target.files[0])} // Ensure the file object is set correctly
