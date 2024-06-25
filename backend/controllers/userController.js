@@ -65,4 +65,26 @@ const getUsers = async (req, res) => {
   }
 };
 
-module.exports = { signupUser, loginUser, getUsers };
+// add a new user
+const addUser = async (req, res) => {
+  const user = new User(req.body);
+  try {
+    await user.save();
+    res.status(201).json(user);
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
+};
+
+// add many users
+const addManyUsers = async (req, res) => {
+  try {
+    const users = await User.insertMany(req.body);
+    res.status(201).json(users);
+    console.log("users", users);
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
+};
+
+module.exports = { signupUser, loginUser, getUsers, addUser, addManyUsers };

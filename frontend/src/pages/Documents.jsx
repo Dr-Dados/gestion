@@ -32,6 +32,9 @@ const Button = styled.button`
 function Documents() {
   const { documents, dispatch } = useDocumentsContext();
   const { user } = useAuthContext();
+  const [isOpenModal, setIsOpenModal] = useState(false);
+  const [filter, setFilter] = useState("");
+  const [filteredDocuments, setFilteredDocuments] = useState([]);
 
   useEffect(() => {
     const fetchDocuments = async () => {
@@ -53,22 +56,15 @@ function Documents() {
       fetchDocuments();
     }
   }, [dispatch, user]);
-  const [data, setData] = useState([]);
-  const [isOpenModal, setIsOpenModal] = useState(false);
-  const [filter, setFilter] = useState("");
-  useEffect(() => {
-    if (data) {
-      setData(documents);
-      if (filter) {
-        setData(
-          documents.filter((document) =>
-            document.name.toLowerCase().includes(filter.toLowerCase())
-          )
-        );
-      }
-    }
-  }, [filter, documents]);
 
+  useEffect(() => {
+    const filteredDocuments = documents.filter(
+      (doc) =>
+        doc.person[0].name.toLowerCase().includes(filter.toLowerCase()) ||
+        doc.person[0].gamme.toLowerCase().includes(filter.toLowerCase())
+    );
+    setFilteredDocuments(filteredDocuments);
+  }, [filter, filteredDocuments]);
   return (
     <div>
       <DocumentHeader>
@@ -86,11 +82,12 @@ function Documents() {
           }}
         />
       </DocumentHeader>
-      <DocumentTable documents={data} />
+      <DocumentTable documents={filteredDocuments} />
+
       {isOpenModal && (
         <Modal onClose={() => setIsOpenModal(false)}>
           <h1>
-            <CreateDocumentForm />
+            <CreateDocumentForm onClose={() => setIsOpenModal(false)} />
           </h1>
         </Modal>
       )}

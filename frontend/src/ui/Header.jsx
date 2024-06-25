@@ -16,7 +16,6 @@ const HeaderContainer = styled.div`
 function Header() {
   return (
     <HeaderContainer>
-      <LogoutBtn />
     </HeaderContainer>
   );
 }

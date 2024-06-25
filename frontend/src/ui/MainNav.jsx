@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { NavLink } from "react-router-dom";
+import { useLogout } from "../hooks/useLogout";
 
 const NavList = styled.ul`
   display: flex;
@@ -45,13 +46,18 @@ const StyledNavlink = styled(NavLink)`
   }
 `;
 function MainNav() {
+  const { logout } = useLogout();
+  const handleLogout = (e) => {
+    e.preventDefault();
+    logout();
+  };
   return (
     <ul>
       <NavList>
         <StyledNavlink to="users">Utilisateurs</StyledNavlink>
         <StyledNavlink to="documents">Bon de livraison</StyledNavlink>
         <StyledNavlink to="comments">Commentaires</StyledNavlink>
-        <StyledNavlink>Deconnexion</StyledNavlink>
+        <StyledNavlink onClick={handleLogout}>Deconnexion</StyledNavlink>
       </NavList>
     </ul>
   );

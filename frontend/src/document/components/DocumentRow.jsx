@@ -1,10 +1,10 @@
 import styled from "styled-components";
 
 import { HiPencil, HiTrash } from "react-icons/hi2";
-import { useEffect, useState } from "react";
 import { useAuthContext } from "../../hooks/useAuthContext";
 import { useDocumentsContext } from "../../hooks/useDocumentContext";
-
+import { toast } from "react-hot-toast";
+import { useState } from "react";
 const TableColumn = styled.td`
   padding: 1.6rem 2.4rem;
 `;
@@ -37,8 +37,10 @@ const Button = styled.button`
 `;
 function DocumentRow({ document }) {
   const { user } = useAuthContext();
-  const { dispatch, documents } = useDocumentsContext();
+  const { dispatch } = useDocumentsContext();
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
 
+  // display data
   const { _id, status, person, createdAt: date } = document;
   const blDate = new Date(date);
   const formattedDate = blDate.toLocaleDateString("fr-FR", {
@@ -46,9 +48,7 @@ function DocumentRow({ document }) {
     month: "long",
     day: "numeric",
   });
-  console.log(document);
   const { name, fonction, gamme, city } = person[0];
-  console.log(person);
 
   const deleteHandler = async () => {
     try {
@@ -65,6 +65,7 @@ function DocumentRow({ document }) {
       if (response.ok) {
         console.log("Document deleted");
         dispatch({ type: "DELETE_DOCUMENT", payload: _id });
+        toast.success("Document supprimé avec succès");
       }
     } catch (error) {
       console.error(error);
@@ -80,7 +81,17 @@ function DocumentRow({ document }) {
         <TableColumn>{city}</TableColumn>
         <TableColumn>{formattedDate}</TableColumn>
         <TableColumn>
-          {status === "Signed" ? "signé" : "en attente"}
+          <div className="w-max">
+            <div
+              className={`relative grid items-center px-2 py-1 font-sans text-sm font-bold ${
+                status === "en attente"
+                  ? "text-red-900 bg-red-500/20"
+                  : "text-green-900 bg-green-500/20"
+              } uppercase rounded-md select-none whitespace-nowrap `}
+            >
+              <span className="">{status}</span>
+            </div>
+          </div>
         </TableColumn>
 
         <ActionButtons>

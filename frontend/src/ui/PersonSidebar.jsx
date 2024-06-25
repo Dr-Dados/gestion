@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { NavLink } from "react-router-dom";
+import { useLogout } from "../hooks/useLogout";
 
 const NavList = styled.ul`
   display: flex;
@@ -45,11 +46,12 @@ const StyledNavlink = styled(NavLink)`
   }
 `;
 function PersonSideBar() {
+  const { logout } = useLogout();
   return (
     <ul>
       <NavList>
         <StyledNavlink to="Bls">Bon de livraison</StyledNavlink>
-        <StyledNavlink>Deconnexion</StyledNavlink>
+        <StyledNavlink onClick={logout}>Deconnexion</StyledNavlink>
       </NavList>
     </ul>
   );

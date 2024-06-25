@@ -6,13 +6,16 @@ import Button from "../../ui/Button";
 import FileInput from "../../ui/FileInput";
 import FormRow from "../../ui/FormRow";
 import { useAuthContext } from "../../hooks/useAuthContext";
+import { useDocumentsContext } from "../../hooks/useDocumentContext";
+import toast from "react-hot-toast";
 
 const Label = styled.label`
   font-weight: 500;
 `;
 
-function CreateDocumentForm() {
+function CreateDocumentForm({ onClose }) {
   const { user } = useAuthContext();
+  const { dispatch } = useDocumentsContext();
 
   const [file, setFile] = useState(null);
   const [users, setUsers] = useState([]);
@@ -49,7 +52,6 @@ function CreateDocumentForm() {
         },
       ],
     };
-    console.log(newDoc);
     const reponse = await fetch("http://localhost:3000/api/documents", {
       headers: {
         Authorization: `Bearer ${user.token}`,
@@ -59,13 +61,14 @@ function CreateDocumentForm() {
       body: JSON.stringify(newDoc),
     });
     const json = await reponse.json();
-    console.log(json);
 
     if (!reponse.ok) {
       alert("Une erreur s'est produite");
     }
     if (reponse.ok) {
-      alert("Document créé avec succès");
+      onClose();
+      dispatch({ type: "ADD_DOCUMENT", payload: json });
+      toast.success("Document créé avec succès");
     }
   };
 

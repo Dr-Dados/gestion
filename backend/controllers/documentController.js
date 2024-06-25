@@ -36,10 +36,11 @@ const getDocumentsByUser = async (req, res) => {
 //create a document
 const createDocument = async (req, res) => {
   try {
+    console.log("req.body", req.body);
     const file = req.body.newFile;
-    if (!file) {
-      return res.status(400).json({ message: "Please upload a file" });
-    }
+    // if (!file) {
+    //   return res.status(400).json({ message: "Please upload a file" });
+    // }
     const { name, gamme, city, email, fonction } = req.body?.person[0];
     console.log(name, gamme, city, email);
     const newDoc = {
@@ -57,14 +58,14 @@ const createDocument = async (req, res) => {
     };
     console.log("newDoc", newDoc);
 
-    const document = BL.create(newDoc);
-    // send mail on success
+    const document = await BL.create(newDoc);
+    // // send mail on success
     sendMail(
       email,
       "Document Created",
       "Your document has been created successfully"
     );
-    res.status(201).json(document);
+    res.status(200).json(document);
   } catch (err) {
     res.status(400).json({ message: err.message });
   }

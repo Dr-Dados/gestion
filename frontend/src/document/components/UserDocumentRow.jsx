@@ -8,35 +8,20 @@ const TableColumn = styled.td`
   padding: 1.6rem 2.4rem;
 `;
 
-const ActionButtons = styled.div`
-  & button {
-    background-color: transparent;
-    border: none;
-    cursor: pointer;
-    transition: all 0.3s;
-
-    &:hover {
-      color: var(--color-brand-600);
-    }
-  }
-`;
-
-const Button = styled.button`
-  font-size: 1.4rem;
-  font-weight: 500;
-  padding: 1.2rem 2.4rem;
-  border: none;
-  border-radius: 5px;
+const CustomButton = styled.button`
+  background-color: var(--color-green-100);
+  color: var(--color-white);
+  padding: 0.8rem 1.6rem;
+  border-radius: 0.4rem;
   cursor: pointer;
   transition: all 0.3s;
 
   &:hover {
-    background-color: var(--color-brand-300);
+    background-color: var(--color-green-700);
+    color: white;
   }
 `;
-function DocumentRow({ document }) {
-  const { user } = useAuthContext();
-
+function DocumentRow({ document, setSelectedId, setIsOpenModal }) {
   const { _id, status, person, createdAt: date } = document;
   const blDate = new Date(date);
   const formattedDate = blDate.toLocaleDateString("fr-FR", {
@@ -44,23 +29,36 @@ function DocumentRow({ document }) {
     month: "long",
     day: "numeric",
   });
-  console.log(formattedDate);
-  const { name, fonction, gamme, city } = person[0];
-  console.log(person);
+
+  const handleClick = () => {
+    setSelectedId(_id);
+    setIsOpenModal(true);
+  };
 
   return (
     <>
       <tr>
         <TableColumn>{_id}</TableColumn>
         <TableColumn>{formattedDate}</TableColumn>
-        <TableColumn>{status}</TableColumn>
+        <TableColumn>
+          <div className="w-max">
+            <div
+              className={`relative grid items-center px-2 py-1 font-sans text-sm font-bold ${
+                status === "en attente"
+                  ? "text-red-900 bg-red-500/20"
+                  : "text-green-900 bg-green-500/20"
+              } uppercase rounded-md select-none whitespace-nowrap `}
+            >
+              <span className="">{status}</span>
+            </div>
+          </div>
+        </TableColumn>
 
-        <ActionButtons>
-          <Button>
-            <HiPencil />
+        <div>
+          <CustomButton onClick={handleClick}>
             <p>Accuser réception</p>
-          </Button>
-        </ActionButtons>
+          </CustomButton>
+        </div>
       </tr>
     </>
   );

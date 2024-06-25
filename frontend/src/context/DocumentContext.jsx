@@ -22,7 +22,7 @@ export const documentReducer = (state, action) => {
       return {
         ...state,
         documents: state.documents.filter(
-          (document) => document.id !== action.payload
+          (document) => document._id !== action.payload
         ),
       };
     default:

@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import DocumentRow from "./DocumentRow";
+import UserDocumentRow from "./UserDocumentRow";
 
 const Table = styled.table`
   width: 100%;
@@ -11,7 +11,7 @@ const TableColumn = styled.td`
   font-weight: 500;
 `;
 
-function DocumentTable({ documents }) {
+function DocumentTable({ documents, setSelectedId, setIsOpenModal }) {
   return (
     <Table role="table">
       <TableHeader role="row">
@@ -22,7 +22,12 @@ function DocumentTable({ documents }) {
         <TableColumn>Actions</TableColumn>
       </TableHeader>
       {documents.map((document) => (
-        <DocumentRow key={document._id} document={document} />
+        <UserDocumentRow
+          key={document._id}
+          document={document}
+          setSelectedId={setSelectedId}
+          setIsOpenModal={setIsOpenModal}
+        />
       ))}
     </Table>
   );

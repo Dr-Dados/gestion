@@ -13,9 +13,7 @@ import Comments from "./pages/Comments";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import { useAuthContext } from "./hooks/useAuthContext";
-import AdminHome from "./pages/AdminHome";
-import PersonHome from "./pages/PersonHome";
-
+import { Toaster } from "react-hot-toast";
 import PersonBL from "./pages/PersonBL";
 
 const App = () => {
@@ -23,6 +21,16 @@ const App = () => {
   return (
     <Router>
       <GlobalStyles />
+      <Toaster
+        position="top-center"
+        gutter={12}
+        containerStyle={{
+          margin: "8px",
+        }}
+        toastOptions={{
+          duration: 3000,
+        }}
+      />
 
       <Routes>
         <Route
@@ -30,7 +38,10 @@ const App = () => {
           element={user ? <AppLayout /> : <Navigate to="login" />}
         >
           {/* Admin roles */}
-          <Route path="/" element={user?.role === "admin" && <AdminHome />} />
+          <Route
+            path="/"
+            element={user?.role === "admin" ? <Documents /> : <PersonBL />}
+          />
           <Route path="users" element={user?.role === "admin" && <Users />} />
           <Route
             path="documents"
@@ -42,7 +53,6 @@ const App = () => {
           />
           {/* Person roles */}
 
-          <Route path="/" element={user?.role === "person" && <PersonHome />} />
           <Route
             path="/Bls"
             element={user?.role === "person" && <PersonBL />}
