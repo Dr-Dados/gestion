@@ -1,4 +1,6 @@
 const BL = require("../models/documentModel");
+const sendMail = require("../helpers/sendMail");
+const mongoose = require("mongoose");
 
 //get all documents
 const getDocuments = async (req, res) => {
@@ -24,7 +26,7 @@ const getDocumentById = async (req, res) => {
 //get all documents by user
 const getDocumentsByUser = async (req, res) => {
   try {
-    const documents = await BL.find({ personId: req.params.id });
+    const documents = await BL.find({ personId: req.params.user_id });
     res.status(200).json(documents);
   } catch (err) {
     res.status(500).json({ message: err.message });
@@ -34,42 +36,84 @@ const getDocumentsByUser = async (req, res) => {
 //create a document
 const createDocument = async (req, res) => {
   try {
-    const document = BL.create(req.body);
-    res.status(201).json(document);
+    const file = req.file;
+    const newDocData = JSON.parse(req.body.newDoc);
+    const { _id, name, gamme, city, email, fonction } = newDocData.person[0];
+    const blName = `BL_${new Date}`
+    const newDoc = {
+      path: file.path,
+      name: file.originalname,
+      user_id: newDocData.user_id,
+      person: [
+        {
+          name,
+          gamme,
+          fonction,
+          city,
+          email,
+        },
+      ],
+      comments: [],
+    };
+    console.log("newDoc", newDoc);
+
+    const document = await BL.create(newDoc);
+    // // send mail on success
+    sendMail(
+      email,
+      "Document Created",
+      "Your document has been created successfully"
+    );
+    res.status(200).json(document);
   } catch (err) {
     res.status(400).json({ message: err.message });
   }
 };
-
-//update a document
+// update only comments ans status on document by adding comment to other comments and changing status
 const updateDocument = async (req, res) => {
+  const { _id, comments, status } = req.body;
+
+  if (!mongoose.Types.ObjectId.isValid(_id)) {
+    return res.status(404).json({ error: "No such document" });
+  }
+
   try {
-    const document = await BL.findById(req.params.id);
-    if (document) {
-      document.status = req.body.status;
-      const updatedDocument = await document.save();
-      res.status(200).json(updatedDocument);
-    } else {
-      res.status(404).json({ message: "Document not found" });
+    const newComment = { comment: comments };
+    console.log(newComment);
+    const document = await BL.findOneAndUpdate(
+      { _id },
+      {
+        $push: { comments: newComment },
+        $set: { status },
+      },
+      { new: true }
+    );
+
+    if (!document) {
+      return res.status(400).json({ error: "No such document" });
     }
-  } catch (err) {
-    res.status(500).json({ message: err.message });
+
+    res.status(200).json(document);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
   }
 };
 
 //delete a document
 const deleteDocument = async (req, res) => {
-  try {
-    const document = await BL.findById(req.params.id);
-    if (document) {
-      await document.remove();
-      res.status(200).json({ message: "Document deleted" });
-    } else {
-      res.status(404).json({ message: "Document not found" });
-    }
-  } catch (err) {
-    res.status(500).json({ message: err.message });
+  const { id } = req.params;
+
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(404).json({ error: "No such document" });
   }
+
+  const document = await BL.findOneAndDelete({ _id: id });
+
+  if (!document) {
+    return res.status(400).json({ error: "No such document" });
+  }
+
+  res.status(200).json(document);
 };
 
 module.exports = {
@@ -77,5 +121,6 @@ module.exports = {
   getDocumentsByUser,
   createDocument,
   getDocumentById,
-  deleteDocument
+  deleteDocument,
+  updateDocument,
 };

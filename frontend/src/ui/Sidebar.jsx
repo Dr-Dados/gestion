@@ -2,6 +2,8 @@ import styled from "styled-components";
 import Logo from "./Logo";
 import MenuItem from "./MainNav";
 import MainNav from "./MainNav";
+import { useAuthContext } from "../hooks/useAuthContext";
+import PersonSideBar from "./PersonSidebar";
 
 const SidebarContainer = styled.div`
   grid-area: sidebar;
@@ -18,11 +20,13 @@ const SidebarContainer = styled.div`
 `;
 
 function Sidebar() {
+  const { user } = useAuthContext();
+
   return (
     <SidebarContainer>
       <Logo />
       <nav>
-        <MainNav />
+        {user && user.role === "admin" ? <MainNav /> : <PersonSideBar />}
       </nav>
     </SidebarContainer>
   );

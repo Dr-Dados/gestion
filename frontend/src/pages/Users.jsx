@@ -37,7 +37,6 @@ const TableBtn = styled.button`
 function Users() {
   const { persons, dispatch } = usePersonsContext();
   const { user } = useAuthContext();
-  console.log("context", usePersonsContext());
   //get All users
   useEffect(() => {
     const fetchUsers = async () => {
@@ -61,7 +60,6 @@ function Users() {
     }
   }, [dispatch, user]);
 
-  console.log(persons);
   return (
     <div>
       <h1>Users</h1>

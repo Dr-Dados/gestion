@@ -45,22 +45,16 @@ const StyledNavlink = styled(NavLink)`
     color: var(--color-brand-600);
   }
 `;
-function MainNav() {
+function PersonSideBar() {
   const { logout } = useLogout();
-  const handleLogout = (e) => {
-    e.preventDefault();
-    logout();
-  };
   return (
     <ul>
       <NavList>
-        <StyledNavlink to="users">Utilisateurs</StyledNavlink>
-        <StyledNavlink to="documents">Bon de livraison</StyledNavlink>
-        <StyledNavlink to="comments">Commentaires</StyledNavlink>
-        <StyledNavlink onClick={handleLogout}>Deconnexion</StyledNavlink>
+        <StyledNavlink to="Bls">Bon de livraison</StyledNavlink>
+        <StyledNavlink onClick={logout}>Deconnexion</StyledNavlink>
       </NavList>
     </ul>
   );
 }
 
-export default MainNav;
+export default PersonSideBar;

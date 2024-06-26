@@ -3,6 +3,7 @@ const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const cors = require("cors");
+const path = require("path");
 
 dotenv.config();
 
@@ -21,7 +22,8 @@ app.use(cors());
 app.use("/api/documents", documentRouter);
 app.use("/api/user", userRouter);
 app.use("/api/persons", personRouter);
-
+//download files
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 //connect to mongodb
 
 mongoose

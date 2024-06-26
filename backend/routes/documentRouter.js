@@ -5,8 +5,11 @@ const {
   getDocumentsByUser,
   createDocument,
   deleteDocument,
+  updateDocument,
 } = require("../controllers/documentController");
 const requireAuth = require("../middleware/requireAuth");
+
+const fileUpload = require("../middleware/fileUploads");
 
 const router = express.Router();
 // Require Auth for all documents routes
@@ -21,12 +24,14 @@ router.get("/:id", getDocumentById);
 router.get("/user/:id", getDocumentsByUser);
 
 //create a document
-router.post("/", createDocument);
+router.post("/", fileUpload.single("file"), createDocument);
+// router.post("/", (req, res) => {
+//   console.log(req.body);
+//   res.send(req.body);
+// });
 
 //update a document
-router.put("/:id", (req, res) => {
-  res.json({ message: "Document updated" });
-});
+router.patch("/:id", updateDocument);
 
 //delete a document
 router.delete("/:id", deleteDocument);

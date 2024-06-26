@@ -3,6 +3,7 @@ import ReactDOM from "react-dom/client";
 import App from "./App.jsx";
 import { AuthContextProvider } from "./context/AuthContext";
 import { DocumentContextProvider } from "./context/DocumentContext";
+import "./index.css";
 import {
   PersonsContext,
   PersonsContextProvider,

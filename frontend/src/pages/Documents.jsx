@@ -32,6 +32,9 @@ const Button = styled.button`
 function Documents() {
   const { documents, dispatch } = useDocumentsContext();
   const { user } = useAuthContext();
+  const [isOpenModal, setIsOpenModal] = useState(false);
+  const [filter, setFilter] = useState("");
+  const [filteredDocuments, setFilteredDocuments] = useState([]);
 
   useEffect(() => {
     const fetchDocuments = async () => {
@@ -42,7 +45,6 @@ function Documents() {
           },
         });
         const data = await res.json();
-        console.log("data", data);
         if (res.ok) {
           dispatch({ type: "SET_DOCUMENTS", payload: data });
         }
@@ -53,23 +55,16 @@ function Documents() {
     if (user) {
       fetchDocuments();
     }
-    console.log(documents);
   }, [dispatch, user]);
-  const [data, setData] = useState([]);
-  const [isOpenModal, setIsOpenModal] = useState(false);
-  const [filter, setFilter] = useState("");
+
   useEffect(() => {
-    if (data) {
-      setData(documents);
-      if (filter) {
-        setData(
-          documents.filter((document) =>
-            document.name.toLowerCase().includes(filter.toLowerCase())
-          )
-        );
-      }
-    }
-  }, [filter, documents]);
+    const filteredDocuments = documents.filter(
+      (doc) =>
+        doc.person[0].name.toLowerCase().includes(filter.toLowerCase()) ||
+        doc.person[0].gamme.toLowerCase().includes(filter.toLowerCase())
+    );
+    setFilteredDocuments(filteredDocuments);
+  }, [filter, filteredDocuments]);
   return (
     <div>
       <DocumentHeader>
@@ -87,11 +82,16 @@ function Documents() {
           }}
         />
       </DocumentHeader>
-      <DocumentTable documents={data} />
+      {documents.length > 0 ? (
+        <DocumentTable documents={filteredDocuments} />
+      ) : (
+        <h3>Aucun document à afficher</h3>
+      )}
+
       {isOpenModal && (
         <Modal onClose={() => setIsOpenModal(false)}>
           <h1>
-            <CreateDocumentForm />
+            <CreateDocumentForm onClose={() => setIsOpenModal(false)} />
           </h1>
         </Modal>
       )}

@@ -1,8 +1,8 @@
 const User = require("../models/userModel");
 const JWT = require("jsonwebtoken");
 
-const createToken = (_id) => {
-  return JWT.sign({ _id }, process.env.JWT_SECRET, {
+const createToken = (_id, role) => {
+  return JWT.sign({ _id, role }, process.env.JWT_SECRET, {
     expiresIn: "1d",
   });
 };
@@ -12,7 +12,7 @@ const loginUser = async (req, res) => {
   const { email, password } = req.body;
   try {
     const user = await User.login(email, password);
-    const token = createToken(user._id);
+    const token = createToken(user._id, user.role);
     res.status(201).json({ email, token, role: user.role });
   } catch (err) {
     res.status(400).json({ message: err.message });
@@ -65,4 +65,26 @@ const getUsers = async (req, res) => {
   }
 };
 
-module.exports = { signupUser, loginUser, getUsers };
+// add a new user
+const addUser = async (req, res) => {
+  const user = new User(req.body);
+  try {
+    await user.save();
+    res.status(201).json(user);
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
+};
+
+// add many users
+const addManyUsers = async (req, res) => {
+  try {
+    const users = await User.insertMany(req.body);
+    res.status(201).json(users);
+    console.log("users", users);
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
+};
+
+module.exports = { signupUser, loginUser, getUsers, addUser, addManyUsers };

@@ -13,27 +13,50 @@ import Comments from "./pages/Comments";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import { useAuthContext } from "./hooks/useAuthContext";
+import { Toaster } from "react-hot-toast";
+import PersonBL from "./pages/PersonBL";
 
 const App = () => {
   const { user } = useAuthContext();
   return (
     <Router>
       <GlobalStyles />
+      <Toaster
+        position="top-center"
+        gutter={12}
+        containerStyle={{
+          margin: "8px",
+        }}
+        toastOptions={{
+          duration: 3000,
+        }}
+      />
 
       <Routes>
         <Route
           path="/"
-          element={
-            user && user.role === "admin" ? (
-              <AppLayout />
-            ) : (
-              <Navigate to="login" />
-            )
-          }
+          element={user ? <AppLayout /> : <Navigate to="login" />}
         >
-          <Route path="users" element={<Users />} />
-          <Route path="documents" element={<Documents />} />
-          <Route path="comments" element={<Comments />} />
+          {/* Admin roles */}
+          <Route
+            path="/"
+            element={user?.role === "admin" ? <Documents /> : <PersonBL />}
+          />
+          <Route path="users" element={user?.role === "admin" && <Users />} />
+          <Route
+            path="documents"
+            element={user?.role === "admin" && <Documents />}
+          />
+          <Route
+            path="comments"
+            element={user?.role === "admin" && <Comments />}
+          />
+          {/* Person roles */}
+
+          <Route
+            path="/Bls"
+            element={user?.role === "person" && <PersonBL />}
+          />
         </Route>
 
         <Route
