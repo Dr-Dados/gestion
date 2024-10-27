@@ -64,7 +64,7 @@ function Documents() {
         doc.person[0].gamme.toLowerCase().includes(filter.toLowerCase())
     );
     setFilteredDocuments(filteredDocuments);
-  }, [filter, filteredDocuments]);
+  }, [filter, filteredDocuments, documents]);
   return (
     <div>
       <DocumentHeader>
