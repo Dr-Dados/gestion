@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useAuthContext } from "./useAuthContext";
+import toast from "react-hot-toast";
 
 export const useLogin = () => {
   const [error, setError] = useState("");
@@ -17,18 +18,18 @@ export const useLogin = () => {
       body: JSON.stringify({ email, password }),
     });
     const json = await response.json();
-    console.log(json)
     if (!response.ok) {
       setLoading(false);
       setError(json.message);
       return;
     }
     if (response.ok) {
-        console.log("json",json)
+      setError(null);
       localStorage.setItem("token", json.token);
       localStorage.setItem("user", JSON.stringify(json));
       dispatch({ type: "LOGIN", payload: json });
       setLoading(false);
+      toast.success("Vous êtes connecté");
     }
   };
   return { error, loading, login };
